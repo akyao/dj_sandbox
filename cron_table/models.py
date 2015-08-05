@@ -21,3 +21,23 @@ class CronLine(models.Model):
 
     def __unicode__(self):
         return self.body
+
+    def calc_hours(self):
+        import re
+        h = re.sub(r'\s', '', self.hour)
+
+        if self.hour == "*":
+            return range(0, 60)
+
+        hours = []
+        for he in h.split(","):
+            # TODO 2-59/5
+            if he.count("-") > 0:
+                h_from, h_to = he.split("-")
+                hours.extend(range(int(h_from), int(h_to)))
+            elif he.count("/") > 0:
+                # TODO
+                pass
+            else:
+                hours.append(int(he))
+        return sorted(hours)
