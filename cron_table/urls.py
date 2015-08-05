@@ -10,6 +10,7 @@ urlpatterns = [
 
     url(r'create', views.create),
     url(r'save', views.save),
+    url(r'show/(?P<cron_hash>[^/]+)', views.show),
     url(r'^', views.index),
 
 ]

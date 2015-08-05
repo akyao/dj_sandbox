@@ -18,3 +18,6 @@ class CronLine(models.Model):
     week = models.CharField(max_length=1024, null=True)
     hour = models.CharField(max_length=1024, null=True)
     minute = models.CharField(max_length=1024, null=True)
+
+    def __unicode__(self):
+        return self.body
