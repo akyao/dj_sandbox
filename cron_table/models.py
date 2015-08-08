@@ -26,14 +26,21 @@ class CronLine(models.Model):
     def __unicode__(self):
         return self.body
 
+    def calc_minutes(self):
+        return self.calc_times(self.minute, 60)
+
     def calc_hours(self):
+        return self.calc_times(self.hour, 24)
+
+    @staticmethod
+    def calc_times(time, to):
         import re
-        h = re.sub(r'\s', '', self.hour)
+        h = re.sub(r'\s', '', time)
 
-        if self.hour == "*":
-            return range(0, 60)
+        if time == "*":
+            return range(0, to)
 
-        hours = []
+        times = []
         for he in h.split(","):
 
             dash = he.count("-") > 0
@@ -42,17 +49,17 @@ class CronLine(models.Model):
             if dash and not slash:
                 # 2-14
                 h_from, h_to = he.split("-")
-                hours.extend(range(int(h_from), int(h_to) + 1))
+                times.extend(range(int(h_from), int(h_to) + 1))
             elif not dash and slash:
                 # TODO */n とみなしてよい？
                 n = int(he.split("/")[1])
-                hours.extend(range(0, 60 , n))
+                times.extend(range(0, to , n))
             elif dash and slash:
                 # 2-59/5
                 front, back = he.split("/")
                 front_from, front_to = front.split("-")
-                hours.extend(range(int(front_from), int(front_to), int(back)))
+                times.extend(range(int(front_from), int(front_to), int(back)))
             else:
-                hours.append(int(he))
+                times.append(int(he))
 
-        return sorted(list(set(hours)))
+        return sorted(list(set(times)))
