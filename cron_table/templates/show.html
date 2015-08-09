@@ -1,18 +1,33 @@
-{# extends '/templates/layout.html' #}
+{% extends 'layout.html' %}
 
 {% block content %}
 
-  <table>
+  <table class="table table-bordered table-striped">
     <thead>
-    <th>実行コマンド</th>
-    <th>実行タイミング設定</th>
-    <th>サンプル</th>
+      <tr>
+        <th rowspan="2">実行コマンド</th>
+        <th rowspan="2">実行タイミング設定</th>
+        <th colspan="24">スケジュール</th>
+      </tr>
+      <tr>
+        {% for i in hours %}
+        <th>{{i}}</th>
+        {% endfor %}
+      </tr>
     </thead>
     {% for l in lines %}
     <tr>
       <td>{{l.command}}</td>
       <td>{{l.minute}} {{l.hour}} {{l.day}} {{l.month}} {{l.week}}</td>
-      <td>{{l.calc_minutes}}</td>
+      {% for i in hours %}
+      <td class="schedule_cell">
+        {% if i in l.calc_hours %}
+          {% for m in l.calc_minutes %}
+            <div class="schedule_on" style="left:{{ m }}px;"></div>
+          {% endfor %}
+        {% endif %}
+      </td>
+      {% endfor %}
     </tr>
     {% endfor %}
   </table>

@@ -62,4 +62,5 @@ class CronLine(models.Model):
             else:
                 times.append(int(he))
 
+
         return sorted(list(set(times)))

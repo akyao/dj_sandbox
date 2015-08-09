@@ -26,7 +26,7 @@ def show(request, cron_hash):
 
     cron = Cron.objects.get(hash=cron_hash)
     lines = CronLine.objects.filter(cron_id = cron.id)
-    return render_to_response("show.html", {"cron": cron, "lines": lines})
+    return render_to_response("show.html", {"cron": cron, "lines": lines, "hours": range(0, 24)})
 
 
 def save(request):
