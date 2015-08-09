@@ -2,11 +2,11 @@
 
 {% block content %}
 
-  <table class="table table-bordered table-striped">
+  <table id="cron_table" class="table table-bordered table-striped">
     <thead>
       <tr>
-        <th rowspan="2">実行コマンド</th>
-        <th rowspan="2">実行タイミング設定</th>
+        <th rowspan="2" style="width:300px;">コマンド</th>
+        <th rowspan="2" style="width:200px;">タイミング設定</th>
         <th colspan="24">スケジュール</th>
       </tr>
       <tr>
@@ -17,8 +17,8 @@
     </thead>
     {% for l in lines %}
     <tr>
-      <td>{{l.command}}</td>
-      <td>{{l.minute}} {{l.hour}} {{l.day}} {{l.month}} {{l.week}}</td>
+      <td class="cron_cell">{{l.command|truncatechars:45}}</td>
+      <td class="cron_cell">{{l.minute}} {{l.hour}} {{l.day}} {{l.month}} {{l.week}}</td>
       {% for i in hours %}
       <td class="schedule_cell">
         {% if i in l.calc_hours %}

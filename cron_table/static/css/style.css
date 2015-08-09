@@ -1,14 +1,26 @@
+#cron_table{
+    width:1940px;
+}
+
 td.schedule_cell {
     position:relative;
     width:60px;
     padding:0px !important;
 }
 
+#cron_table td{
+    padding:3px;
+}
+
 .schedule_on{
     position:absolute;
     float:left;
-    top: 10px;
+
     width:1px;
-    height:20px;
+    height:26px;
     background-color:gray;
+}
+
+.cron_cell{
+    white-space:nowrap;
 }

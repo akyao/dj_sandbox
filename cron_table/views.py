@@ -4,17 +4,17 @@ import hashlib
 import re
 from datetime import datetime
 
-from django.shortcuts import render
-from django.shortcuts import render_to_response
-from django.http import HttpResponse
+from django.shortcuts import render,render_to_response,redirect
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template.context_processors import csrf
 from django.template import RequestContext
 from cron_table.models import Cron, CronLine
 
 
 def index(request):
-    html = "<html><body>It is hoge</body></html>"
-    return HttpResponse(html)
+    """TOP"""
+    return render_to_response("top.html")
 
 
 def create(request):
@@ -25,7 +25,7 @@ def create(request):
 def show(request, cron_hash):
 
     cron = Cron.objects.get(hash=cron_hash)
-    lines = CronLine.objects.filter(cron_id = cron.id)
+    lines = CronLine.objects.filter(cron_id = cron.id, minute__isnull=False)
     return render_to_response("show.html", {"cron": cron, "lines": lines, "hours": range(0, 24)})
 
 
@@ -55,7 +55,7 @@ def save(request):
             continue
 
         # 複数行の空白や、タブは1スペースに置換する
-        line_text = re.sub(r'\s{2,}', ' ', line_text)
+        line_text = re.sub(r'\s{1,}', ' ', line_text)
 
         if len(line_text) > 1024:
             raise Exception("too big line")
@@ -100,4 +100,4 @@ def save(request):
 
         cron_line.save()
 
-    return render_to_response("show.html", cron)
+    return redirect("show/{}".format(cron.hash))
