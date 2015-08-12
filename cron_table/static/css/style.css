@@ -1,3 +1,40 @@
+/** layout */
+header{
+    background-color: #444;
+    height: 72px;
+    width: 100%;
+    line-height: 72px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+footer{
+    background-color: #444;
+    height: 36px;
+    width: 100%;
+    color: rgba(255, 255, 255, 0.8);
+    position:absolute;
+    bottom:0;
+}
+
+.wrapper{
+    margin-top:20px;
+}
+
+body{
+    color: #444;
+}
+
+.title{
+    font-size:2.6em;
+    letter-spacing:0.036em;
+}
+    .title a{
+        color:#ddd;
+        text-decoration:none;
+    }
+
+/** show **/
+
 #cron_table{
     width:1940px;
 }
@@ -23,4 +60,15 @@ td.schedule_cell {
 
 .cron_cell{
     white-space:nowrap;
+}
+
+
+/** edit **/
+.edit_form{
+    width:800px;
+    padding-left:100px;
+}
+
+.btn-save{
+    padding:10px 40px;
 }
