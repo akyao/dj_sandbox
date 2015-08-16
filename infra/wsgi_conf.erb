@@ -1,0 +1,22 @@
+LoadModule wsgi_module modules/mod_wsgi.so
+
+<%= @message %>
+WSGIScriptAlias / /var/www/html/<%= @proj %>/<%= @app %>/wsgi.py
+WSGIPythonPath /var/www/html/<%= @proj %>
+WSGIPythonHome <%= @python %>
+WSGIRestrictStdout Off
+
+<Directory /var/www/html/<%= @proj %>/v_github>
+  Options Indexes FollowSymLinks
+  <Files wsgi.py>
+    Allow from all
+  </Files>
+</Directory>
+
+Alias /static/ /var/www/html/<%= @proj %>/static/
+
+<Directory /var/www/html/<%= @proj %>/static/>
+  Allow from all
+</Directory>
+
+ErrorLog /var/log/httpd/error_log
