@@ -1,6 +1,6 @@
 /** layout */
 header{
-    background-color: #444;
+    background-color: #333;
     height: 72px;
     width: 100%;
     line-height: 72px;
@@ -29,7 +29,7 @@ body{
     letter-spacing:0.036em;
 }
     .title a{
-        color:#ddd;
+        color:#ccc;
         text-decoration:none;
     }
 

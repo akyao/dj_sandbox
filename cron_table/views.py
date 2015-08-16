@@ -23,7 +23,7 @@ def create(request):
 
 
 def show(request, cron_hash):
-
+    """CRON設定表示"""
     cron = Cron.objects.get(hash=cron_hash)
     lines = CronLine.objects.filter(cron_id = cron.id, minute__isnull=False)
     return render_to_response("show.html", {"cron": cron, "lines": lines, "hours": range(0, 24)})
@@ -68,12 +68,8 @@ def save(request):
         if is_setting:
             continue
 
-        # TODO 分割
-
         # TODO valid 設定
-        # TODO 大きすぎないこと
-
-        # TODO valid
+        # TODO valid 大きすぎないこと
 
         cron_line = CronLine(cron = cron)
         cron_line.body = line_text
