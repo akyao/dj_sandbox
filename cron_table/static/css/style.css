@@ -1,14 +1,14 @@
 /** layout */
 header{
-    background-color: #333;
+    background-color: #555273;
     height: 72px;
     width: 100%;
     line-height: 72px;
-    color: rgba(255, 255, 255, 0.8);
+    color: #b6d5e1;
 }
 
 footer{
-    background-color: #444;
+    background-color: #555273;
     height: 36px;
     width: 100%;
     color: rgba(255, 255, 255, 0.8);
@@ -21,7 +21,23 @@ footer{
 }
 
 body{
-    color: #444;
+    color: #555273;
+}
+
+#cron_table, #cron_table th, #cron_table td{
+border-color:#b6d5e1;
+}
+
+#cron_table thead th, #cron_table thead td{
+border-color:#e2eff1;
+}
+
+#cron_table thead{
+    background-color: #b6d5e1;
+}
+
+#cron_table tbody tr:nth-of-type(odd){
+    background-color: #e2eff1;
 }
 
 .title{
@@ -55,7 +71,7 @@ td.schedule_cell {
 
     width:1px;
     height:26px;
-    background-color:gray;
+    background-color:#555273;
 }
 
 .cron_cell{
