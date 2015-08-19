@@ -77,12 +77,12 @@ service 'mysqld' do
 end
 
 # user
-execute "mysql -uroot -e \"DELETE FROM mysql.user WHERE User='';\""
-execute "mysql -uroot -e \"DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');\""
-execute "mysql -uroot -e \"DROP DATABASE test;\"; echo"
-execute "mysql -uroot -e \"DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%'\""
-execute "mysql -uroot -e \"FLUSH PRIVILEGES;\""
+# execute "mysql -uroot -e \"DELETE FROM mysql.user WHERE User='';\""
+# execute "mysql -uroot -e \"DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');\""
+# execute "mysql -uroot -e \"DROP DATABASE test;\"; echo"
+# execute "mysql -uroot -e \"DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%'\""
+# execute "mysql -uroot -e \"FLUSH PRIVILEGES;\""
 
-execute "mysql -uroot -e \"CREATE DATABASE sandbox CHARACTER SET utf8;\""
+execute "mysql -uroot -e \"CREATE DATABASE if not exists sandbox CHARACTER SET utf8;\""
 execute "mysql -uroot -e \"GRANT ALL ON sandbox.* to sandbox@localhost;\""
 execute "mysql -uroot -e \"FLUSH PRIVILEGES;\""
