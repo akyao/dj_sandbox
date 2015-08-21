@@ -3,27 +3,47 @@ PROJECT = "project"
 APP = "app"
 PYTHON = "/home/vagrant/venv/env27"
 
-%w(libjpeg-devel zlib-devel git httpd httpd-devel python-devel).each do |p|
-  package p
-end
+execute "yum groupinstall -y 'Development Tools'"
+
+package "bzip2-devel"
+package "openssl-devel"
+package "ncurses-devel"
+package "sqlite-devel"
+package "readline-devel"
+package "tk-devel"
+package "gdbm-devel"
+package "db4-devel"
+package "libpcap-devel"
+package "xz-devel"
+
+package "libjpeg-devel"
+package "zlib-devel"
+package "git"
+package "httpd"
+package "httpd-devel"
+package "python-devel"
+
 
 execute "install python 2.7.6" do
-  command "wget http://www.python.org/ftp/python/2.7.6/Python-2.7.6.tgz;tar -xzvf Python-2.7.6.tgz;cd Python-2.7.6;./configure --enable-shared;make;sudo make install;sudo ln -s /usr/local/lib/libpython2.7.so.1.0 /lib64/"
+  command "wget http://www.python.org/ftp/python/2.7.6/Python-2.7.6.tgz;tar -xzvf Python-2.7.6.tgz;cd Python-2.7.6;./configure --enable-shared;make;make install;ln -s /usr/local/lib/libpython2.7.so.1.0 /lib64/"
   not_if "ls /lib64 | grep python2.7"
 end
 
 execute "pip" do
-  command "wget https://bootstrap.pypa.io/get-pip.py;python get-pip.py"
+  command "wget https://bootstrap.pypa.io/get-pip.py;/usr/local/bin/python get-pip.py"
   not_if "pip --version | grep pip"
 end
 
+execute "pwd"
+execute "whoami"
+
 execute "virtualenv" do
-  command "sudo pip install virtualenv"
+  command "/usr/local/bin/pip install virtualenv"
   not_if "which virtualenv | grep virtualenv"
 end
 
 execute "setting virtualenv" do
-  command "mkdir venv; cd venv; virtualenv env27 --python=/usr/local/bin/python2.7"
+  command "mkdir venv; cd venv; /usr/local/bin/virtualenv env27 --python=/usr/local/bin/python2.7"
   not_if "test -e venv/env27"
 end
 
@@ -56,7 +76,7 @@ template "/etc/httpd/conf.d/wsgi.conf" do
 end
 
 execute "django install" do
-  command "pip install Django==1.8.2"
+  command "/usr/local/bin/pip install Django==1.8.2"
   not_if "test -e /usr/bin/django-admin"
 end
 
