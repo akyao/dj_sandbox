@@ -3,7 +3,6 @@ PROJECT = "dj_sandbox"
 APP = "cron_table"
 PYTHON = "/home/#{node[:user]}/venv/env27"
 
-
 execute "yum groupinstall -y 'Development Tools'"
 
 # fuck selinux
@@ -98,7 +97,7 @@ package 'http://dev.mysql.com/get/mysql-community-release-el6-5.noarch.rpm' do
   not_if 'rpm -q mysql-community-release-el6-5'
 end
 
-#package 'mysql-server' old!
+package 'mysql-server'
 package 'mysql-devel'
 
 execute "install python-mysql" do
