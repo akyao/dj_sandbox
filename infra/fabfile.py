@@ -30,7 +30,7 @@ def deploy():
     sudo("rm -f /var/www/html/dj_sandbox")
     sudo("ln -s /var/www/html/dj_sandbox{0} /var/www/html/dj_sandbox".format(now))
 
-    #sudo("/etc/init.d/httpd restart")
+    sudo("/etc/init.d/httpd restart")
 
     # TODO google analytics
 
