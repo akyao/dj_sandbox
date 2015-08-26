@@ -28,9 +28,7 @@ DEBUG = not IS_PROD
 if IS_PROD:
     f = open(os.path.join(BASE_DIR, '../secret'))
     SECRET_KEY = f.readline()
-    print SECRET_KEY
     f.close()
-    exit()
 else:
     SECRET_KEY = 'so4ex!k#_0bha&zci9@4k6z9m^viv(one$_7@ct$4k9@qvld2n'
 
