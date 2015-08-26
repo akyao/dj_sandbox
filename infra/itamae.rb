@@ -142,6 +142,18 @@ directory "create work dir" do
   group "#{node[:user]}"
 end
 
-execute "mysql -uroot -e \"CREATE DATABASE if not exists sandbox CHARACTER SET utf8;\""
-execute "mysql -uroot -e \"GRANT ALL ON sandbox.* to sandbox@localhost;\""
+# django sentting secret key
+require 'securerandom'
+file "create secret key file" do
+  path "/var/www/html/secret"
+  action :create
+  content "#{SecureRandom.base64(50)}"
+  mode "744"
+  owner "#{node[:user]}"
+  group "#{node[:user]}"
+  not_if "test -e /var/www/html/secret"
+end
+
+execute "mysql -uroot -e \"CREATE DATABASE if not exists dj_sandbox CHARACTER SET utf8;\""
+execute "mysql -uroot -e \"GRANT ALL ON dj_sandbox.* to dj_sandbox@localhost;\""
 execute "mysql -uroot -e \"FLUSH PRIVILEGES;\""

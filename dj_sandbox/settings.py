@@ -19,11 +19,20 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'so4ex!k#_0bha&zci9@4k6z9m^viv(one$_7@ct$4k9@qvld2n'
+IS_PROD = os.path.exists(os.path.join(BASE_DIR, 'prod.txt'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = not IS_PROD
+
+# SECURITY WARNING: keep the secret key used in production secret!
+if IS_PROD:
+    f = open(os.path.join(BASE_DIR, '../secret'))
+    SECRET_KEY = f.readline()
+    print SECRET_KEY
+    f.close()
+    exit()
+else:
+    SECRET_KEY = 'so4ex!k#_0bha&zci9@4k6z9m^viv(one$_7@ct$4k9@qvld2n'
 
 ALLOWED_HOSTS = []
 
@@ -78,7 +87,7 @@ WSGI_APPLICATION = 'dj_sandbox.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dj_sandbox_dev',
+        'NAME': 'dj_sandbox',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',

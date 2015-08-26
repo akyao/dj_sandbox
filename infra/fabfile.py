@@ -6,7 +6,6 @@ from fabric.colors import *
 
 env.use_ssh_config = True
 
-@hosts("sandbox")
 def deploy():
     # tmpディレクトリに移動。git clone
     now = datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -35,7 +34,6 @@ def deploy():
 
     # TODO google analytics
 
-@hosts("sandbox")
 def mig():
     """migrate"""
     with cd("/var/www/html/dj_sandbox"):
