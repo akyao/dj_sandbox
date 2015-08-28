@@ -37,4 +37,4 @@ def deploy():
 def mig():
     """migrate"""
     with cd("/var/www/html/dj_sandbox"):
-        run("python manage.py migrate")
+        run("source ~/venv/env27/bin/activate && python manage.py migrate")

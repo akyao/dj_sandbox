@@ -39,17 +39,16 @@ package "httpd-devel"
 package "python-devel"
 
 
-execute "install python 2.7.6" do
-  command "wget http://www.python.org/ftp/python/2.7.6/Python-2.7.6.tgz;
-            tar -xzvf Python-2.7.6.tgz;
-            cd Python-2.7.6;
+execute "install python 2.7" do
+  command "wget http://www.python.org/ftp/python/2.7.9/Python-2.7.9.tgz;
+            tar -xzvf Python-2.7.9.tgz;
+            cd Python-2.7.9;
             ./configure --enable-shared;
             make;
             sudo make install;
             ln -s /usr/local/lib/libpython2.7.so.1.0 /lib64/"
   not_if "ls /lib64 | grep python2.7"
 end
-
 
 execute "pip" do
   command "wget https://bootstrap.pypa.io/get-pip.py;
@@ -59,6 +58,7 @@ end
 
 execute "virtualenv" do
   command "/usr/local/bin/pip install virtualenv"
+  #user "#{node[:user]}"
   not_if "which virtualenv | grep virtualenv"
 end
 
@@ -66,12 +66,21 @@ execute "setting virtualenv" do
   command "mkdir venv;
             cd venv;
             /usr/local/bin/virtualenv env27 --python=/usr/local/bin/python2.7"
+  user "#{node[:user]}"
   not_if "test -e venv/env27"
 end
 
 execute "activate venv" do
   command "cd venv/env27;
             source bin/activate"
+end
+
+execute "django install" do
+  command "cd venv/env27;
+            source bin/activate;
+            pip install Django==1.8.2"
+  user "#{node[:user]}"
+  not_if "test -e /home/#{node[:user]}/venv/env27/bin/django-admin"
 end
 
 execute "wsgi down" do
@@ -82,7 +91,7 @@ end
 
 execute "wsgi install" do
   command "cd mod_wsgi-3.3;
-            ./configure --with-apxs=/usr/sbin/apxs --with-python=/usr/local/bin/python2.7;
+            ./configure --with-apxs=/usr/sbin/apxs --with-python=/home/#{node[:user]}/venv/env27/bin/python2.7;
             make;
             sudo make install"
   not_if "test -e /etc/httpd/modules/mod_wsgi.so"
@@ -101,8 +110,10 @@ package 'mysql-server'
 package 'mysql-devel'
 
 execute "install python-mysql" do
-  command "sudo /usr/local/bin/pip install MySQL-python"
-  not_if "/usr/local/bin/pip list | grep MySQL-python"
+  command "cd venv/env27;
+            source bin/activate;
+            pip install MySQL-python"
+  not_if "/home/#{node[:user]}/venv/env27/bin/pip/ list | grep MySQL-python"
 end
 
 template "/etc/httpd/conf.d/wsgi.conf" do
@@ -114,10 +125,6 @@ template "/etc/httpd/conf.d/wsgi.conf" do
   variables(proj: PROJECT, app: APP, python: PYTHON)
 end
 
-execute "django install" do
-  command "/usr/local/bin/pip install Django==1.8.2"
-  not_if "test -e /usr/bin/django-admin"
-end
 
 execute "httpd setting" do
   command "mkdir /var/www/html/dummy;
@@ -142,7 +149,6 @@ directory "create work dir" do
   group "#{node[:user]}"
 end
 
-# django sentting secret key
 require 'securerandom'
 file "create secret key file" do
   path "/var/www/html/secret"
