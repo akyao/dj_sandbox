@@ -1,7 +1,11 @@
 
 PROJECT = "dj_sandbox"
 APP = "cron_table"
-PYTHON = "/home/#{node[:user]}/venv/env27"
+
+VENV_DIR="/var/venv"
+VENV_PATH="/var/venv/env27"
+
+PYTHON = VENV_PATH
 
 execute "yum groupinstall -y 'Development Tools'"
 
@@ -62,25 +66,30 @@ execute "virtualenv" do
   not_if "which virtualenv | grep virtualenv"
 end
 
+directory "create virtualenv dir" do
+  action :create
+  path "#{VENV_DIR}"
+  mode "777"
+  owner "#{node[:user]}"
+  group "#{node[:user]}"
+end
+
 execute "setting virtualenv" do
-  command "mkdir venv;
-            cd venv;
+  command "cd #{VENV_DIR} &&
             /usr/local/bin/virtualenv env27 --python=/usr/local/bin/python2.7"
   user "#{node[:user]}"
-  not_if "test -e venv/env27"
+  not_if "test -e #{VENV_PATH}"
 end
 
 execute "activate venv" do
-  command "cd venv/env27;
-            source bin/activate"
+  command "source #{VENV_PATH}/bin/activate"
 end
 
 execute "django install" do
-  command "cd venv/env27;
-            source bin/activate;
+  command "source #{VENV_PATH}/bin/activate &&
             pip install Django==1.8.2"
   user "#{node[:user]}"
-  not_if "test -e /home/#{node[:user]}/venv/env27/bin/django-admin"
+  not_if "test -e #{VENV_PATH}/bin/django-admin"
 end
 
 execute "wsgi down" do
@@ -91,7 +100,7 @@ end
 
 execute "wsgi install" do
   command "cd mod_wsgi-3.3;
-            ./configure --with-apxs=/usr/sbin/apxs --with-python=/home/#{node[:user]}/venv/env27/bin/python2.7;
+            ./configure --with-apxs=/usr/sbin/apxs --with-python=#{VENV_PATH}/bin/python2.7;
             make;
             sudo make install"
   not_if "test -e /etc/httpd/modules/mod_wsgi.so"
@@ -110,10 +119,9 @@ package 'mysql-server'
 package 'mysql-devel'
 
 execute "install python-mysql" do
-  command "cd venv/env27;
-            source bin/activate;
+  command "source #{VENV_PATH}/bin/activate &&
             pip install MySQL-python"
-  not_if "/home/#{node[:user]}/venv/env27/bin/pip/ list | grep MySQL-python"
+  not_if "#{VENV_PATH}/bin/pip/ list | grep MySQL-python"
 end
 
 template "/etc/httpd/conf.d/wsgi.conf" do

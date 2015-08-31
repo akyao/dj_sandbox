@@ -6,6 +6,8 @@ from fabric.colors import *
 
 env.use_ssh_config = True
 
+VENV_PATH="/var/venv/env27"
+
 def deploy():
     # tmpディレクトリに移動。git clone
     now = datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -37,4 +39,4 @@ def deploy():
 def mig():
     """migrate"""
     with cd("/var/www/html/dj_sandbox"):
-        run("source ~/venv/env27/bin/activate && python manage.py migrate")
+        run("source {0}/bin/activate && python manage.py migrate".format(VENV_PATH))
