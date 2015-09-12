@@ -6,7 +6,7 @@ WSGIPythonPath /var/www/html/<%= @proj %>
 WSGIPythonHome <%= @python %>
 WSGIRestrictStdout Off
 
-<Directory /var/www/html/<%= @proj %>>
+<Directory /var/www/html/<%= @proj %>/<%= @proj %>>
   Options Indexes FollowSymLinks
   <Files wsgi.py>
     Allow from all

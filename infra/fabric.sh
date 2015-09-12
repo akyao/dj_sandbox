@@ -12,6 +12,14 @@ do
 		fab -H vagrant mig
 		break;
 	fi
+	if [ "${TARGET}" = "ec2_deploy" ]; then
+		fab -H ec2 deploy
+		break;
+	fi
+	if [ "${TARGET}" = "vag_migration" ]; then
+		fab -H ec2 mig
+		break;
+	fi
     if [ "${TARGET}" = "prod_deploy" ]; then
 		fab -H sandbox deploy
 		break;

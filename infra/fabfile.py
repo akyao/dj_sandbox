@@ -9,7 +9,7 @@ env.use_ssh_config = True
 VENV_PATH="/var/venv/env27"
 
 def deploy():
-    # tmpディレクトリに移動。git clone
+    """deployします"""
     now = datetime.now().strftime("%Y%m%d-%H%M%S")
     work_dir = "/tmp/{0}".format(now)
     local("mkdir {0}".format(work_dir))
@@ -34,7 +34,6 @@ def deploy():
 
     sudo("/etc/init.d/httpd restart")
 
-    # TODO google analytics
 
 def mig():
     """migrate"""

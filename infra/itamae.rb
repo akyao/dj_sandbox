@@ -22,6 +22,7 @@ file "/etc/selinux/config" do
   block do |content|
     content.gsub!("SELINUX=enforcing", "SELINUX=disabled")
   end
+  only_if "test -e /etc/selinux/config"
 end
 
 package "bzip2-devel"
@@ -29,7 +30,7 @@ package "openssl-devel"
 package "ncurses-devel"
 package "sqlite-devel"
 package "readline-devel"
-package "tk-devel"
+#package "tk-devel"
 package "gdbm-devel"
 package "db4-devel"
 package "libpcap-devel"
@@ -75,8 +76,7 @@ directory "create virtualenv dir" do
 end
 
 execute "setting virtualenv" do
-  command "cd #{VENV_DIR} &&
-            /usr/local/bin/virtualenv env27 --python=/usr/local/bin/python2.7"
+  command "cd #{VENV_DIR} ;/usr/local/bin/virtualenv env27 --python=/usr/local/bin/python2.7"
   user "#{node[:user]}"
   not_if "test -e #{VENV_PATH}"
 end
@@ -107,7 +107,8 @@ execute "wsgi install" do
 end
 
 execute "wsgi setting1" do
-  command "echo '/usr/local/lib' >> /etc/ld.so.conf"
+  user "root"
+  command "echo '/usr/local/lib' >> /etc/ld.so.conf; ldconfig"
   not_if "grep '/usr/local/lib' /etc/ld.so.conf"
 end
 
